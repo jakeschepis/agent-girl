@@ -47,6 +47,21 @@ export const MCP_SERVERS_BY_PROVIDER: Record<ProviderType, Record<string, McpSer
       type: 'http',
       url: 'https://mcp.grep.app',
     },
+    // Supabase MCP - database operations, migrations, Edge Functions
+    'supabase': {
+      type: 'stdio',
+      command: 'npx',
+      args: ['-y', '@supabase/mcp-server-supabase@latest'],
+      env: {
+        'SUPABASE_ACCESS_TOKEN': process.env.SUPABASE_ACCESS_TOKEN || '',
+      },
+    },
+    // Sequential Thinking MCP - structured problem-solving through step-by-step reasoning
+    'sequential-thinking': {
+      type: 'stdio',
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-sequential-thinking'],
+    },
   },
   'z-ai': {
     // Grep.app MCP - code search across public GitHub repositories
@@ -79,12 +94,42 @@ export const MCP_SERVERS_BY_PROVIDER: Record<ProviderType, Record<string, McpSer
         'Authorization': `Bearer ${process.env.ZAI_API_KEY || ''}`,
       },
     },
+    // Supabase MCP - database operations, migrations, Edge Functions
+    'supabase': {
+      type: 'stdio',
+      command: 'npx',
+      args: ['-y', '@supabase/mcp-server-supabase@latest'],
+      env: {
+        'SUPABASE_ACCESS_TOKEN': process.env.SUPABASE_ACCESS_TOKEN || '',
+      },
+    },
+    // Sequential Thinking MCP - structured problem-solving through step-by-step reasoning
+    'sequential-thinking': {
+      type: 'stdio',
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-sequential-thinking'],
+    },
   },
   'moonshot': {
     // Grep.app MCP - code search across public GitHub repositories
     'grep': {
       type: 'http',
       url: 'https://mcp.grep.app',
+    },
+    // Supabase MCP - database operations, migrations, Edge Functions
+    'supabase': {
+      type: 'stdio',
+      command: 'npx',
+      args: ['-y', '@supabase/mcp-server-supabase@latest'],
+      env: {
+        'SUPABASE_ACCESS_TOKEN': process.env.SUPABASE_ACCESS_TOKEN || '',
+      },
+    },
+    // Sequential Thinking MCP - structured problem-solving through step-by-step reasoning
+    'sequential-thinking': {
+      type: 'stdio',
+      command: 'npx',
+      args: ['-y', '@modelcontextprotocol/server-sequential-thinking'],
     },
   },
 };
@@ -113,9 +158,38 @@ export function getAllowedMcpTools(provider: ProviderType, _modelId?: string): s
     'mcp__grep__searchGitHub',
   ];
 
+  // Supabase MCP tools - available to all providers
+  const supabaseTools = [
+    'mcp__supabase__search_docs',
+    'mcp__supabase__list_organizations',
+    'mcp__supabase__get_organization',
+    'mcp__supabase__list_projects',
+    'mcp__supabase__get_project',
+    'mcp__supabase__list_tables',
+    'mcp__supabase__list_extensions',
+    'mcp__supabase__list_migrations',
+    'mcp__supabase__apply_migration',
+    'mcp__supabase__execute_sql',
+    'mcp__supabase__get_logs',
+    'mcp__supabase__get_advisors',
+    'mcp__supabase__get_project_url',
+    'mcp__supabase__get_publishable_keys',
+    'mcp__supabase__generate_typescript_types',
+    'mcp__supabase__list_edge_functions',
+    'mcp__supabase__get_edge_function',
+    'mcp__supabase__deploy_edge_function',
+  ];
+
+  // Sequential Thinking MCP tools - available to all providers
+  const sequentialThinkingTools = [
+    'mcp__sequential-thinking__sequentialthinking_tools',
+  ];
+
   if (provider === 'anthropic') {
     return [
       ...grepTools,
+      ...supabaseTools,
+      ...sequentialThinkingTools,
     ];
   }
 
@@ -127,12 +201,16 @@ export function getAllowedMcpTools(provider: ProviderType, _modelId?: string): s
       'mcp__zai-mcp-server__image_analysis',
       'mcp__zai-mcp-server__video_analysis',
       'mcp__web-reader__webReader',
+      ...supabaseTools,
+      ...sequentialThinkingTools,
     ];
   }
 
   if (provider === 'moonshot') {
     return [
       ...grepTools,
+      ...supabaseTools,
+      ...sequentialThinkingTools,
     ];
   }
 

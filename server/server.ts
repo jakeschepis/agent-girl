@@ -97,7 +97,7 @@ if (!IS_STANDALONE) {
 }
 
 const server = Bun.serve({
-  port: 3001,
+  port: 8888,
   idleTimeout: 255, // 4.25 minutes (Bun's maximum) - keepalive messages every 30s prevent timeout
 
   websocket: {
